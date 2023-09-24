@@ -53,7 +53,7 @@ ${htmlImgs.join(`\n`)}
         description: descriptionMd,
     });
 	const paramsStr = params.toString();
-	window.open(`https://huggingface.co/spaces/stabilityai/stable-diffusion/discussions/new?${paramsStr}`, '_blank');
+	window.open(`https://huggingface.co/spaces/pcuenq/sdxl/discussions/new?${paramsStr}`, '_blank');
     shareBtnEl.style.removeProperty('pointer-events');
     shareIconEl.style.removeProperty('display');
     loadingIconEl.style.display = 'none';
