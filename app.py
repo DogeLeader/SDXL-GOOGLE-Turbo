@@ -320,5 +320,5 @@ Despite how impressive being able to turn text into image is, beware that this m
             )
         
 
-block.queue(concurrency_count=40, max_size=50).launch(max_threads=70, server_name="0.0.0.0")
+block.queue(concurrency_count=4, max_size=10).launch()
 #block.launch(server_name="0.0.0.0")
