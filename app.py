@@ -43,7 +43,7 @@ css = """
         .dark input[type='range'] {
             accent-color: #dfdfdf;
         }
-        .container {
+        .gradio-container {
             max-width: 730px;
             margin: auto;
             padding-top: 1.5rem;
@@ -251,27 +251,9 @@ with block:
                         max_lines=1,
                         placeholder="Enter your prompt",
                         elem_id="prompt-text-input",
-                    ).style(
-                        border=(True, False, True, True),
-                        rounded=(True, False, False, True),
-                        container=False,
                     )
-                    negative = gr.Textbox(
-                        label="Enter your negative prompt",
-                        show_label=False,
-                        max_lines=1,
-                        placeholder="Enter a negative prompt",
-                        elem_id="negative-prompt-text-input",
-                    ).style(
-                        border=(True, False, True, True),
-                        rounded=(True, False, False, True),
-                        container=False,
-                    )
-                btn = gr.Button("Generate image").style(
-                    margin=False,
-                    rounded=(False, True, True, False),
-                    full_width=False,
-                )
+                    
+                btn = gr.Button("Generate image")
 
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
@@ -284,6 +266,13 @@ with block:
                 share_button = gr.Button("Share to community", elem_id="share-btn")
 
         with gr.Accordion("Advanced settings", open=False):
+             negative = gr.Textbox(
+                        label="Enter your negative prompt",
+                        show_label=False,
+                        max_lines=1,
+                        placeholder="Enter a negative prompt",
+                        elem_id="negative-prompt-text-input",
+             )
              guidance_scale = gr.Slider(
                 label="Guidance Scale", minimum=0, maximum=50, value=9, step=0.1
              )
