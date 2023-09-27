@@ -154,12 +154,12 @@ block = gr.Blocks(css=css)
 
 examples = [
     [
-        'A high tech solarpunk utopia in the Amazon rainforest',
+        'The spirit of a tamagotchi wandering in the city of Budapest',
         None,
         None
     ],
     [
-        'A pikachu fine dining with a view to the Eiffel Tower',
+        'A Squirtle fine dining with a view to the London Eye',
         None,
         None
     ],
@@ -175,6 +175,11 @@ examples = [
     ],
     [
         "A small cabin on top of a snowy mountain in the style of Disney, artstation",
+        None,
+        None
+    ],
+    [
+        "A serious capybara at work, wearing a suit",
         None,
         None
     ],
