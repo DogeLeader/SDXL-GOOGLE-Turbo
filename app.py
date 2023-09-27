@@ -267,7 +267,7 @@ with block:
                         elem_id="negative-prompt-text-input",
              )
              guidance_scale = gr.Slider(
-                label="Guidance Scale", minimum=0, maximum=50, value=9, step=0.1
+                label="Guidance Scale", minimum=0, maximum=50, value=7.5, step=0.1
              )
 
     ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], cache_examples=True, postprocess=False)
