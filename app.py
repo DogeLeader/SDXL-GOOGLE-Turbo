@@ -241,8 +241,8 @@ with block:
             </div>
         """
     )
-    with gr.Group():
-            with gr.Row(elem_id="prompt-container").style(mobile_collapse=False, equal_height=True):
+    
+    with gr.Row(elem_id="prompt-container").style(mobile_collapse=False, equal_height=True):
                 text = gr.Textbox(
                         label="Enter your prompt",
                         show_label=False,
@@ -256,13 +256,13 @@ with block:
                 label="Generated images", show_label=False, elem_id="gallery"
             ).style(grid=[2], height="auto")
     
-    with gr.Group(elem_id="container-advanced-btns"):
-            with gr.Group(elem_id="share-btn-container"):
+
+    with gr.Group(elem_id="share-btn-container"):
                 community_icon = gr.HTML(community_icon_html)
                 loading_icon = gr.HTML(loading_icon_html)
                 share_button = gr.Button("Share to community", elem_id="share-btn")
-    with gr.Group():
-        with gr.Accordion("Advanced settings", open=False):
+    
+    with gr.Accordion("Advanced settings", open=False):
              negative = gr.Textbox(
                         label="Enter your negative prompt",
                         show_label=False,
