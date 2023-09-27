@@ -12,7 +12,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 #word_list = word_list_dataset["train"]['text']
 word_list = []
 
-def infer(prompt, negative, scale):
+def infer(prompt, negative="low_quality", scale=7):
     for filter in word_list:
         if re.search(rf"\b{filter}\b", prompt):
             raise gr.Error("Unsafe content found. Please try again with different prompts.")
@@ -122,24 +122,14 @@ css = """
                 transform: rotate(360deg);
             }
         }
-        #share-btn-container {
-            display: flex; padding-left: 0.5rem !important; padding-right: 0.5rem !important; background-color: #000000; justify-content: center; align-items: center; border-radius: 9999px !important; width: 13rem;
-            margin-top: 10px;
-            margin-left: auto;
-        }
-        #share-btn {
-            all: initial; color: #ffffff;font-weight: 600; cursor:pointer; font-family: 'IBM Plex Sans', sans-serif; margin-left: 0.5rem !important; padding-top: 0.25rem !important; padding-bottom: 0.25rem !important;right:0;
-        }
-        #share-btn * {
-            all: unset;
-        }
-        #share-btn-container div:nth-child(-n+2){
-            width: auto !important;
-            min-height: 0px !important;
-        }
-        #share-btn-container .wrap {
-            display: none !important;
-        }
+        #share-btn-container {padding-left: 0.5rem !important; padding-right: 0.5rem !important; background-color: #000000; justify-content: center; align-items: center; border-radius: 9999px !important; max-width: 13rem; margin-left: auto;}
+        div#share-btn-container > div {flex-direction: row;background: black;align-items: center}
+        #share-btn-container:hover {background-color: #060606}
+        #share-btn {all: initial; color: #ffffff;font-weight: 600; cursor:pointer; font-family: 'IBM Plex Sans', sans-serif; margin-left: 0.5rem !important; padding-top: 0.5rem !important; padding-bottom: 0.5rem !important;right:0;}
+        #share-btn * {all: unset}
+        #share-btn-container div:nth-child(-n+2){width: auto !important;min-height: 0px !important;}
+        #share-btn-container .wrap {display: none !important}
+        #share-btn-container.hidden {display: none!important}
         
         .gr-form{
             flex: 1 1 50%; border-top-right-radius: 0; border-bottom-right-radius: 0;
@@ -157,28 +147,28 @@ block = gr.Blocks(css=css)
 examples = [
     [
         'A high tech solarpunk utopia in the Amazon rainforest',
-        'low quality',
-        9
+        None,
+        None
     ],
     [
         'A pikachu fine dining with a view to the Eiffel Tower',
-        'low quality',
-        9
+        None,
+        None
     ],
     [
         'A mecha robot in a favela in expressionist style',
-        'low quality, 3d, photorealistic',
-        9
+        None,
+        None
     ],
     [
         'an insect robot preparing a delicious meal',
-        'low quality, illustration',
-        9
+        None,
+        None
     ],
     [
         "A small cabin on top of a snowy mountain in the style of Disney, artstation",
-        'low quality, ugly',
-        9
+        None,
+        None
     ],
 ]
 
@@ -253,8 +243,8 @@ with block:
                 btn = gr.Button("Generate", scale=0)
 
             gallery = gr.Gallery(
-                label="Generated images", show_label=False, elem_id="gallery"
-            ).style(grid=[2], height="auto")
+                label="Generated images", show_label=False, elem_id="gallery", grid=[2]
+            )
     
 
     with gr.Group(elem_id="share-btn-container"):
@@ -275,7 +265,7 @@ with block:
              )
 
         ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_icon, loading_icon, share_button], cache_examples=False)
-        ex.dataset.headers = [""]
+        #ex.dataset.headers = [""]
         negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
         text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
         btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
