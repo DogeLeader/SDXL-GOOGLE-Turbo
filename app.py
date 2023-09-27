@@ -231,10 +231,10 @@ with block:
                 </h1>
               </div>
               <p style="margin-bottom: 10px; font-size: 94%; line-height: 23px;">
-                SDXL is the latest text-to-image model from StabilityAI. This demo runs on a backend powered by Google <a style="text-decoration: underline;" href="https://cloud.google.com/blog/products/compute/announcing-cloud-tpu-v5e-and-a3-gpus-in-ga">Cloud TPU v5e</a> hardware, to achieve efficient and cost-effective inference of large 1024×1024 images.
+                SDXL is a high quality text-to-image model from Stability AI. This demo on a <a style="text-decoration: underline;" href="https://cloud.google.com/blog/products/compute/announcing-cloud-tpu-v5e-and-a3-gpus-in-ga">Google Cloud TPU v5e</a>, to achieve efficient and cost-effective inference of 1024×1024 images.
               </p>
               <p style="margin-bottom: 10px; font-size: 94%; line-height: 23px;">
-                See here more details about how it works [pending].
+                See <a href="#">here more details about how it works</a>.
               </p>
             </div>
         """
