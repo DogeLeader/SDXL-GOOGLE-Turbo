@@ -137,6 +137,14 @@ css = """
         #prompt-container{
             gap: 0;
         }
+        #prompt-container .form{
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        }
+        #gen-button{
+        border-top-left-radius:0;
+        border-bottom-left-radius:0;
+        }
         #prompt-text-input, #negative-prompt-text-input{padding: .45rem 0.625rem}
         #component-16{border-top-width: 1px!important;margin-top: 1em}
         .image_duplication{position: absolute; width: 100px; left: 50px}
@@ -240,7 +248,7 @@ with block:
                         placeholder="Enter your prompt",
                         elem_id="prompt-text-input",
                 )    
-                btn = gr.Button("Generate", scale=0)
+                btn = gr.Button("Generate", scale=0, elem_id="gen-button")
 
     gallery = gr.Gallery(
                 label="Generated images", show_label=False, elem_id="gallery", grid=[2]
