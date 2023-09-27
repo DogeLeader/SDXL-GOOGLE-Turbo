@@ -25,7 +25,7 @@ def infer(prompt, negative="low_quality", scale=7):
         image_b64 = (f"data:image/jpeg;base64,{image}")
         images.append(image_b64)
     
-    return images
+    return images, gr.update(visible=True)
     
     
 css = """
@@ -252,7 +252,7 @@ with block:
     )
     
 
-    with gr.Group(elem_id="share-btn-container"):
+    with gr.Group(elem_id="share-btn-container", visible=False) as community_group:
                 community_icon = gr.HTML(community_icon_html)
                 loading_icon = gr.HTML(loading_icon_html)
                 share_button = gr.Button("Share to community", elem_id="share-btn")
@@ -269,11 +269,10 @@ with block:
                 label="Guidance Scale", minimum=0, maximum=50, value=9, step=0.1
              )
 
-    ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_icon, loading_icon, share_button], cache_examples=False)
-    #ex.dataset.headers = [""]
-    negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
-    text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
-    btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
+    ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], cache_examples=True)
+    negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
+    text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
+    btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
         
     share_button.click(
             None,
