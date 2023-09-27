@@ -264,27 +264,27 @@ with block:
                 label="Guidance Scale", minimum=0, maximum=50, value=9, step=0.1
              )
 
-        ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_icon, loading_icon, share_button], cache_examples=False)
-        #ex.dataset.headers = [""]
-        negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
-        text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
-        btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
+    ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_icon, loading_icon, share_button], cache_examples=False)
+    #ex.dataset.headers = [""]
+    negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
+    text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
+    btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery], postprocess=False)
         
-        share_button.click(
+    share_button.click(
             None,
             [],
             [],
             _js=share_js,
-        )
-        gr.HTML(
+    )
+    gr.HTML(
             """
                 <div class="footer">
                     <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a> - backend running JAX on TPUs due to generous support of <a href="https://sites.research.google/trc/about/" style="text-decoration: underline;" target="_blank">Google TRC program</a> - Gradio Demo by 🤗 Hugging Face
                     </p>
                 </div>
            """
-        )
-        with gr.Accordion(label="License", open=False):
+    )
+    with gr.Accordion(label="License", open=False):
             gr.HTML(
                 """<div class="acknowledgments">
                     <p><h4>LICENSE</h4>
