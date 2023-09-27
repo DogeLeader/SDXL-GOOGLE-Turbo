@@ -4,7 +4,7 @@ emoji: 🏋️	#👕🌟
 colorFrom: red
 colorTo: black
 sdk: gradio
-sdk_version: 3.20.0
+sdk_version: 3.45.1
 app_file: app.py
 license: mit
 disable_embedding: true
