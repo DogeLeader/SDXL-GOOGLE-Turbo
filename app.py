@@ -269,7 +269,7 @@ with block:
                 label="Guidance Scale", minimum=0, maximum=50, value=9, step=0.1
              )
 
-    ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], cache_examples=True)
+    ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], cache_examples=True, postprocess=False)
     negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
     text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
     btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
