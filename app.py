@@ -242,9 +242,9 @@ with block:
                 )    
                 btn = gr.Button("Generate", scale=0)
 
-            gallery = gr.Gallery(
+    gallery = gr.Gallery(
                 label="Generated images", show_label=False, elem_id="gallery", grid=[2]
-            )
+    )
     
 
     with gr.Group(elem_id="share-btn-container"):
