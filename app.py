@@ -44,7 +44,7 @@ css = """
             accent-color: #dfdfdf;
         }
         .gradio-container {
-            max-width: 730px;
+            max-width: 730px !important;
             margin: auto;
             padding-top: 1.5rem;
         }
@@ -244,16 +244,14 @@ with block:
     with gr.Group():
         with gr.Box():
             with gr.Row(elem_id="prompt-container").style(mobile_collapse=False, equal_height=True):
-                with gr.Column():
-                    text = gr.Textbox(
+                text = gr.Textbox(
                         label="Enter your prompt",
                         show_label=False,
                         max_lines=1,
                         placeholder="Enter your prompt",
                         elem_id="prompt-text-input",
-                    )
-                    
-                btn = gr.Button("Generate image")
+                )    
+                btn = gr.Button("Generate", scale=0)
 
         gallery = gr.Gallery(
             label="Generated images", show_label=False, elem_id="gallery"
