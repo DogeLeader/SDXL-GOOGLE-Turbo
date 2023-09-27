@@ -164,17 +164,12 @@ examples = [
         None
     ],
     [
-        'A mecha robot in a favela in expressionist style',
+        'A pão de queijo food cart in front of a Japanese Castle',
         None,
         None
     ],
     [
-        'an insect robot preparing a delicious meal',
-        None,
-        None
-    ],
-    [
-        "A small cabin on top of a snowy mountain in the style of Disney, artstation",
+        'a graffiti of a robot feeding a starving humanity',
         None,
         None
     ],
