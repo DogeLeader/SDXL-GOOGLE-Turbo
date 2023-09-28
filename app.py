@@ -15,8 +15,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 #word_list = word_list_dataset["train"]['text']
 word_list = []
 
-# def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None = None): # TODO: re-enable user_history when oauth fixed
-def infer(prompt, negative="low_quality", scale=7, profile: None = None):
+def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None = None):
     for filter in word_list:
         if re.search(rf"\b{filter}\b", prompt):
             raise gr.Error("Unsafe content found. Please try again with different prompts.")
@@ -322,8 +321,7 @@ with gr.Blocks(css=css) as block_with_history:
     with gr.Tab("Demo"):
         block.render()
     with gr.Tab("Past generations"):
-        gr.Markdown("Deactivated (WIP)")
-        # user_history.render() # TODO: re-enable user_history when oauth fixed
+        user_history.render()
 
 block_with_history.queue(concurrency_count=4, max_size=10).launch()
 #block_with_history.launch(server_name="0.0.0.0")
