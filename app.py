@@ -1,10 +1,13 @@
 import gradio as gr
 from datasets import load_dataset
 
+import base64
 import re
 import os
 import requests
+from io import BytesIO
 
+import user_history
 from share_btn import community_icon_html, loading_icon_html, share_js
 
 # TODO
@@ -12,7 +15,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 #word_list = word_list_dataset["train"]['text']
 word_list = []
 
-def infer(prompt, negative="low_quality", scale=7):
+def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None):
     for filter in word_list:
         if re.search(rf"\b{filter}\b", prompt):
             raise gr.Error("Unsafe content found. Please try again with different prompts.")
@@ -24,6 +27,20 @@ def infer(prompt, negative="low_quality", scale=7):
     for image in images_request.json()["images"]:
         image_b64 = (f"data:image/jpeg;base64,{image}")
         images.append(image_b64)
+
+    if profile is not None: # avoid conversion on non-logged-in users
+        for image in images:
+            pil_image = Image.open(BytesIO(base64.b64decode(image)))
+            user_history.save_image( # save images + metadata to user history
+                label=prompt,
+                image=pil_image,
+                profile=profile,
+                metadata={
+                    "prompt": prompt,
+                    "negative_prompt": negative,
+                    "guidance_scale": scale,
+                },
+            )
     
     return images, gr.update(visible=True)
     
@@ -150,7 +167,7 @@ css = """
         .image_duplication{position: absolute; width: 100px; left: 50px}
 """
 
-block = gr.Blocks(css=css)
+block = gr.Blocks()
 
 examples = [
     [
@@ -299,7 +316,12 @@ Despite how impressive being able to turn text into image is, beware that this m
                </div>
                 """
             )
-        
 
-block.queue(concurrency_count=4, max_size=10).launch()
-#block.launch(server_name="0.0.0.0")
+with gr.Blocks(css=css) as block_with_history:
+    with gr.Tab("Demo"):
+        block.render()
+    with gr.Tab("Past generations"):
+        user_history.render()
+
+block_with_history.queue(concurrency_count=4, max_size=10).launch()
+#block_with_history.launch(server_name="0.0.0.0")
