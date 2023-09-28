@@ -29,8 +29,7 @@ def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | No
         image_b64 = (f"data:image/jpeg;base64,{image}")
         images.append(image_b64)
 
-    if profile is not None: # avoid conversion on non-logged-in users
-        for image in images:
+        if profile is not None: # avoid conversion on non-logged-in users
             pil_image = Image.open(BytesIO(base64.b64decode(image)))
             user_history.save_image( # save images + metadata to user history
                 label=prompt,
