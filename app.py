@@ -5,6 +5,7 @@ import base64
 import re
 import os
 import requests
+from PIL import Image
 from io import BytesIO
 
 import user_history
