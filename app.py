@@ -15,7 +15,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 #word_list = word_list_dataset["train"]['text']
 word_list = []
 
-def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None):
+def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None = None):
     for filter in word_list:
         if re.search(rf"\b{filter}\b", prompt):
             raise gr.Error("Unsafe content found. Please try again with different prompts.")
