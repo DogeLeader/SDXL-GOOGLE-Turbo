@@ -11,15 +11,13 @@ from io import BytesIO
 import user_history
 from share_btn import community_icon_html, loading_icon_html, share_js
 
-# TODO
-#word_list_dataset = load_dataset("stabilityai/word-list", data_files="list.txt", use_auth_token=True)
-#word_list = word_list_dataset["train"]['text']
-word_list = []
+word_list_dataset = load_dataset("google/word-list-sd", data_files="list.txt", use_auth_token=True)
+word_list = word_list_dataset["train"]['text']
 
 def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None = None):
     for filter in word_list:
         if re.search(rf"\b{filter}\b", prompt):
-            raise gr.Error("Unsafe content found. Please try again with different prompts.")
+            raise gr.Error("Please try again with a different prompt")
         
     images = []
     url = os.getenv('JAX_BACKEND_URL')
@@ -165,7 +163,7 @@ css = """
         #prompt-text-input, #negative-prompt-text-input{padding: .45rem 0.625rem}
         #component-16{border-top-width: 1px!important;margin-top: 1em}
         .image_duplication{position: absolute; width: 100px; left: 50px}
-        .tabitem{border: 0}
+        .tabitem{border: 0 !important}
 """
 
 block = gr.Blocks()
