@@ -165,6 +165,7 @@ css = """
         #prompt-text-input, #negative-prompt-text-input{padding: .45rem 0.625rem}
         #component-16{border-top-width: 1px!important;margin-top: 1em}
         .image_duplication{position: absolute; width: 100px; left: 50px}
+        .tabitem{border: 0}
 """
 
 block = gr.Blocks()
