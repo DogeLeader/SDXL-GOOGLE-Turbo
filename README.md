@@ -1,5 +1,5 @@
 ---
-title: Stable Diffusion XL
+title: Stable Diffusion XL on TPUv5e
 emoji: 🏋️	#👕🌟
 colorFrom: red
 colorTo: black
