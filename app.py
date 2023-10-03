@@ -5,6 +5,7 @@ import base64
 import re
 import os
 import requests
+import time
 from PIL import Image
 from io import BytesIO
 
@@ -22,7 +23,9 @@ def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | No
     images = []
     url = os.getenv('JAX_BACKEND_URL')
     payload = {'prompt': prompt, 'negative_prompt': negative, 'guidance_scale': scale}
+    start_time = time.time()
     images_request = requests.post(url, json = payload)
+    print(time.time() - start_time)
     for image in images_request.json()["images"]:
         image_b64 = (f"data:image/jpeg;base64,{image}")
         images.append(image_b64)
