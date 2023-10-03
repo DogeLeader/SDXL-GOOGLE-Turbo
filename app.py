@@ -29,7 +29,12 @@ def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | No
     start_time = time.time()
     images_request = requests.post(url, json = payload)
     print(time.time() - start_time)
-    for image in images_request.json()["images"]:
+    try:
+        json_data = images_request.json()
+    except requests.exceptions.JSONDecodeError:
+        raise gr.Error("SDXL did not return a valid result, try again")
+    
+    for image in json_data["images"]:
         image_b64 = (f"data:image/jpeg;base64,{image}")
         images.append(image_b64)
 
@@ -328,5 +333,5 @@ with gr.Blocks(css=css) as block_with_history:
     with gr.Tab("Past generations"):
         user_history.render()
 
-block_with_history.queue(concurrency_count=8, max_size=10, api_open=False).launch(show_api=False)
+block_with_history.queue(concurrency_count=6, max_size=10, api_open=False).launch(show_api=False)
 #block_with_history.launch(server_name="0.0.0.0")
