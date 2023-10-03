@@ -244,8 +244,8 @@ with block:
                   <rect x="23" y="69" width="23" height="23" fill="black"></rect>
                 </svg>
                 <h1 style="font-weight: 900; margin-bottom: 7px;margin-top:5px">
-                  Stable Diffusion XL on TPU v5e
-                </h1>
+                  Fast Stable Diffusion XL on TPU v5e ⚡
+                </h1> 
               </div>
               <p style="margin-bottom: 10px; font-size: 94%; line-height: 23px;">
                 SDXL is a high quality text-to-image model from Stability AI. This demo on a <a style="text-decoration: underline;" href="https://cloud.google.com/blog/products/compute/announcing-cloud-tpu-v5e-and-a3-gpus-in-ga">Google Cloud TPU v5e</a>, to achieve efficient and cost-effective inference of 1024×1024 images. <a href="https://hf.co/blog/sdxl_jax" target="_blank">How does it work?</a>
