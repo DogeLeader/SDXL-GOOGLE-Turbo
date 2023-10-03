@@ -305,7 +305,7 @@ with block:
                 </div>
            """
     )
-    with gr.Accordion(label="License", open=False):
+    with gr.Accordion(label="License", open=True):
             gr.HTML(
                 """<div class="acknowledgments">
                     <p><h4>LICENSE</h4>
