@@ -333,5 +333,5 @@ with gr.Blocks(css=css) as block_with_history:
     with gr.Tab("Past generations"):
         user_history.render()
 
-block_with_history.queue(concurrency_count=6, max_size=10, api_open=False).launch(show_api=False)
+block_with_history.queue(concurrency_count=8, max_size=10, api_open=False).launch(show_api=False)
 #block_with_history.launch(server_name="0.0.0.0")
