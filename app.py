@@ -9,20 +9,86 @@ import requests
 import time
 from PIL import Image
 from io import BytesIO
+from typing import Tuple
 
 import user_history
 from share_btn import community_icon_html, loading_icon_html, share_js
+
+
+style_list = [
+    {
+        "name": "(No style)",
+        "prompt": "{prompt}",
+        "negative_prompt": "",
+    },
+    {
+        "name": "Cinematic",
+        "prompt": "cinematic still {prompt} . emotional, harmonious, vignette, highly detailed, high budget, bokeh, cinemascope, moody, epic, gorgeous, film grain, grainy",
+        "negative_prompt": "anime, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured",
+    },
+    {
+        "name": "Photographic",
+        "prompt": "cinematic photo {prompt} . 35mm photograph, film, bokeh, professional, 4k, highly detailed",
+        "negative_prompt": "drawing, painting, crayon, sketch, graphite, impressionist, noisy, blurry, soft, deformed, ugly",
+    },
+    {
+        "name": "Anime",
+        "prompt": "anime artwork {prompt} . anime style, key visual, vibrant, studio anime,  highly detailed",
+        "negative_prompt": "photo, deformed, black and white, realism, disfigured, low contrast",
+    },
+    {
+        "name": "Manga",
+        "prompt": "manga style {prompt} . vibrant, high-energy, detailed, iconic, Japanese comic style",
+        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, Western comic style",
+    },
+    {
+        "name": "Digital Art",
+        "prompt": "concept art {prompt} . digital artwork, illustrative, painterly, matte painting, highly detailed",
+        "negative_prompt": "photo, photorealistic, realism, ugly",
+    },
+    {
+        "name": "Pixel art",
+        "prompt": "pixel-art {prompt} . low-res, blocky, pixel art style, 8-bit graphics",
+        "negative_prompt": "sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic",
+    },
+    {
+        "name": "Fantasy art",
+        "prompt": "ethereal fantasy concept art of  {prompt} . magnificent, celestial, ethereal, painterly, epic, majestic, magical, fantasy art, cover art, dreamy",
+        "negative_prompt": "photographic, realistic, realism, 35mm film, dslr, cropped, frame, text, deformed, glitch, noise, noisy, off-center, deformed, cross-eyed, closed eyes, bad anatomy, ugly, disfigured, sloppy, duplicate, mutated, black and white",
+    },
+    {
+        "name": "Neonpunk",
+        "prompt": "neonpunk style {prompt} . cyberpunk, vaporwave, neon, vibes, vibrant, stunningly beautiful, crisp, detailed, sleek, ultramodern, magenta highlights, dark purple shadows, high contrast, cinematic, ultra detailed, intricate, professional",
+        "negative_prompt": "painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured",
+    },
+    {
+        "name": "3D Model",
+        "prompt": "professional 3d model {prompt} . octane render, highly detailed, volumetric, dramatic lighting",
+        "negative_prompt": "ugly, deformed, noisy, low poly, blurry, painting",
+    },
+]
+
+styles = {k["name"]: (k["prompt"], k["negative_prompt"]) for k in style_list}
+STYLE_NAMES = list(styles.keys())
+DEFAULT_STYLE_NAME = "(No style)"
+
+
+def apply_style(style_name: str, positive: str, negative: str = "") -> Tuple[str, str]:
+    p, n = styles.get(style_name, styles[DEFAULT_STYLE_NAME])
+    return p.replace("{prompt}", positive), n + negative
+
 
 word_list_dataset = load_dataset("google/word-list-sd", data_files="list.txt", use_auth_token=True)
 word_list = word_list_dataset["train"]['text']
 
 #gradio.helpers.CACHED_FOLDER="/data/cache"
 
-def infer(prompt, negative="low_quality", scale=7, profile: gr.OAuthProfile | None = None):
+def infer(prompt, negative="low_quality", scale=7, style_name=None, profile: gr.OAuthProfile | None = None):
     for filter in word_list:
         if re.search(rf"\b{filter}\b", prompt):
             raise gr.Error("Please try again with a different prompt")
-        
+
+    prompt, negative = apply_style(style_name, prompt, negative)
     images = []
     url = os.getenv('JAX_BACKEND_URL')
     payload = {'prompt': prompt, 'negative_prompt': negative, 'guidance_scale': scale}
@@ -286,6 +352,12 @@ with block:
                 share_button = gr.Button("Share to community", elem_id="share-btn")
     
     with gr.Accordion("Advanced settings", open=False):
+             style_selection = gr.Radio(
+                               show_label=True, container=True, interactive=True,
+                               choices=STYLE_NAMES,
+                               value=DEFAULT_STYLE_NAME,
+                               label='Image Style'
+             )
              negative = gr.Textbox(
                         label="Enter your negative prompt",
                         show_label=False,
@@ -298,9 +370,9 @@ with block:
              )
 
     ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], cache_examples=True, postprocess=False)
-    negative.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
-    text.submit(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
-    btn.click(infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_group], postprocess=False)
+    negative.submit(infer, inputs=[text, negative, guidance_scale, style_selection], outputs=[gallery, community_group], postprocess=False)
+    text.submit(infer, inputs=[text, negative, guidance_scale, style_selection], outputs=[gallery, community_group], postprocess=False)
+    btn.click(infer, inputs=[text, negative, guidance_scale, style_selection], outputs=[gallery, community_group], postprocess=False)
         
     share_button.click(
             None,
