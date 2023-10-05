@@ -92,7 +92,7 @@ def render() -> None:
     gallery = gr.Gallery(
         label="Past images",
         show_label=True,
-        elem_id="gallery",
+        elem_id="gallery-history",
         object_fit="contain",
         columns=5,
         height=600,
