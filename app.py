@@ -5,6 +5,7 @@ from datasets import load_dataset
 import base64
 import re
 import os
+import random
 import requests
 import time
 from PIL import Image
@@ -88,10 +89,11 @@ def infer(prompt, negative="low_quality", scale=7, style_name=None, profile: gr.
         if re.search(rf"\b{filter}\b", prompt):
             raise gr.Error("Please try again with a different prompt")
 
+    seed = random.randint(0,4294967295)
     prompt, negative = apply_style(style_name, prompt, negative)
     images = []
     url = os.getenv('JAX_BACKEND_URL')
-    payload = {'prompt': prompt, 'negative_prompt': negative, 'guidance_scale': scale}
+    payload = {'instances': [{ 'prompt': prompt, 'negative_prompt': negative, 'parameters':{ 'guidance_scale': scale, 'seed': seed } }] }
     start_time = time.time()
     images_request = requests.post(url, json = payload)
     print(time.time() - start_time)
@@ -100,22 +102,23 @@ def infer(prompt, negative="low_quality", scale=7, style_name=None, profile: gr.
     except requests.exceptions.JSONDecodeError:
         raise gr.Error("SDXL did not return a valid result, try again")
     
-    for image in json_data["images"]:
-        image_b64 = (f"data:image/jpeg;base64,{image}")
-        images.append(image_b64)
+    for prediction in json_data["predictions"]:
+        for image in prediction["images"]:
+            image_b64 = (f"data:image/jpeg;base64,{image}")
+            images.append(image_b64)
 
-        if profile is not None: # avoid conversion on non-logged-in users
-            pil_image = Image.open(BytesIO(base64.b64decode(image)))
-            user_history.save_image( # save images + metadata to user history
-                label=prompt,
-                image=pil_image,
-                profile=profile,
-                metadata={
-                    "prompt": prompt,
-                    "negative_prompt": negative,
-                    "guidance_scale": scale,
-                },
-            )
+            if profile is not None: # avoid conversion on non-logged-in users
+                pil_image = Image.open(BytesIO(base64.b64decode(image)))
+                user_history.save_image( # save images + metadata to user history
+                    label=prompt,
+                    image=pil_image,
+                    profile=profile,
+                    metadata={
+                        "prompt": prompt,
+                        "negative_prompt": negative,
+                        "guidance_scale": scale,
+                    },
+                )
     
     return images, gr.update(visible=True)
     
